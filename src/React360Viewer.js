@@ -690,7 +690,6 @@ class React360Viewer extends Component {
                 this.viewerContainerRef.classList.add('v360-fullscreen')
 
             }
-            this.setImage()
         }
     }
 
