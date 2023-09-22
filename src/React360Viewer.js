@@ -175,7 +175,7 @@ class React360Viewer extends Component {
     initData(){
         //console.log(this.imageContainerRef)
         this.canvas = this.imageContainerRef
-        this.ctx = this.canvas.getContext('2d')
+        this.ctx = this.canvas?.getContext('2d')
         //console.log('initialize data here')
 
         this.attachEvents();
