@@ -64,7 +64,7 @@ class React360Viewer extends Component {
         //this.currentLeftPosition = this.currentLeftPosition.bind(this)
     }
 
-    componentDidMount(){
+    componentDidMount() {
         window.addEventListener('resize', this?.updateDimensions);
         this.disableZoomin()
         this.viewerPercentage = this.viewPercentageRef.current
@@ -75,41 +75,41 @@ class React360Viewer extends Component {
     }
 
     componentWillUnmount() {
-      window.removeEventListener('resize', this?.updateDimensions);
+        window.removeEventListener('resize', this?.updateDimensions);
     }
 
     updateDimensions = () => {
-      // this.setState({ width: window.innerWidth, height: window.innerHeight });
-      this?.setImage();
+        // this.setState({ width: window.innerWidth, height: window.innerHeight });
+        this?.setImage();
     };
 
-    fetchData(){
-        if(this.props.images) {
-          this.imageData = [...this.props.images];
+    fetchData() {
+        if (this.props.images) {
+            this.imageData = [...this.props.images];
         } else {
-          for(let i=1; i <= this.props.amount; i++){
-              const imageIndex = (this.props.paddingIndex) ? this.lpad(i, "0", 2) : i
-              const fileName = this.props.fileName?.replace('{index}', imageIndex);
-              const filePath = `${this.props.imagePath}/${fileName}`.replace(/([^:]\/)\/+/g, "$1");
-              this.imageData.push(filePath)
-          }
+            for (let i = 1; i <= this.props.amount; i++) {
+                const imageIndex = (this.props.paddingIndex) ? this.lpad(i, "0", 2) : i
+                const fileName = this.props.fileName?.replace('{index}', imageIndex);
+                const filePath = `${this.props.imagePath}/${fileName}`.replace(/([^:]\/)\/+/g, "$1");
+                this.imageData.push(filePath)
+            }
         }
 
         this.preloadImages()
     }
 
     isTruthy(valueToCheck) {
-      if(valueToCheck === true || (typeof valueToCheck === 'string' && valueToCheck.toLowerCase() === 'true')) {
-        return true;
-      }
-      return false;
+        if (valueToCheck === true || (typeof valueToCheck === 'string' && valueToCheck.toLowerCase() === 'true')) {
+            return true;
+        }
+        return false;
     }
 
     getSpeedFactor() {
-      if(!isNaN(this.props.speed) && Math.abs(this.props.speed) !== 0) {
-        return this.speedFactor / Math.abs(this.props.speed);
-      }
-      return this.speedFactor;
+        if (!isNaN(this.props.speed) && Math.abs(this.props.speed) !== 0) {
+            return this.speedFactor / Math.abs(this.props.speed);
+        }
+        return this.speedFactor;
     }
 
     lpad(str, padString, length) {
@@ -133,7 +133,7 @@ class React360Viewer extends Component {
         }
     }
 
-    addImage(resultSrc){
+    addImage(resultSrc) {
         const image = new Image();
         image.src = resultSrc;
         //image.crossOrigin='anonymous'
@@ -166,13 +166,13 @@ class React360Viewer extends Component {
         //console.log(percentage + '%')
     }
 
-    onAllImagesLoaded(e){
+    onAllImagesLoaded(e) {
         this.setState({ imagesLoaded: true })
         this.props.onLoaded && this.props.onLoaded(this.images)
         this.initData()
     }
 
-    initData(){
+    initData() {
         //console.log(this.imageContainerRef)
         this.canvas = this.imageContainerRef
         this.ctx = this.canvas?.getContext('2d')
@@ -186,15 +186,15 @@ class React360Viewer extends Component {
         this.setState({ playing: this.props.autoplay })
     }
 
-    attachEvents(){
-        if(this.state.panmode){
+    attachEvents() {
+        if (this.state.panmode) {
             this.bindPanModeEvents()
-        }else{
+        } else {
             this.bind360ModeEvents()
         }
     }
 
-    bindPanModeEvents(){
+    bindPanModeEvents() {
         this.viewPortElementRef.removeEventListener('touchend', this.touchEnd);
         this.viewPortElementRef.removeEventListener('touchstart', this.touchStart);
         this.viewPortElementRef.removeEventListener('touchmove', this.touchMove);
@@ -212,7 +212,7 @@ class React360Viewer extends Component {
         this.viewPortElementRef.addEventListener('mousemove', this.doDragging);
     }
 
-    bind360ModeEvents(){
+    bind360ModeEvents() {
         this.viewPortElementRef.removeEventListener('touchend', this.stopDragging);
         this.viewPortElementRef.removeEventListener('touchstart', this.startDragging);
         this.viewPortElementRef.removeEventListener('touchmove', this.doDragging);
@@ -235,16 +235,16 @@ class React360Viewer extends Component {
         document.body.style.mozUserSelect = document.body.style.webkitUserSelect = document.body.style.userSelect = 'none';
         this.setLastPositions(evt)
 
-        this.dragStart = this.ctx.transformedPoint(this.state.lastX,this.state.lastY);
+        this.dragStart = this.ctx.transformedPoint(this.state.lastX, this.state.lastY);
     }
 
-    setLastPositions(evt){
-        if(this.isMobile){
+    setLastPositions(evt) {
+        if (this.isMobile) {
             this.setState({
                 lastX: evt.touches[0].offsetX || (evt.touches[0].pageX - this.canvas.offsetLeft),
                 lastY: evt.touches[0].offsetY || (evt.touches[0].pageY - this.canvas.offsetTop)
             })
-        }else{
+        } else {
             this.setState({
                 lastX: evt.offsetX || (evt.pageX - this.canvas.offsetLeft),
                 lastY: evt.offsetY || (evt.pageY - this.canvas.offsetTop)
@@ -256,9 +256,9 @@ class React360Viewer extends Component {
 
         this.setLastPositions(evt)
 
-        if (this.dragStart){
-            let pt = this.ctx.transformedPoint(this.state.lastX,this.state.lastY);
-            this.ctx.translate(pt.x-this.dragStart.x,pt.y-this.dragStart.y);
+        if (this.dragStart) {
+            let pt = this.ctx.transformedPoint(this.state.lastX, this.state.lastY);
+            this.ctx.translate(pt.x - this.dragStart.x, pt.y - this.dragStart.y);
             this.redraw();
         }
     }
@@ -268,25 +268,25 @@ class React360Viewer extends Component {
         this.dragStart = null
     }
 
-    checkMobile(){
+    checkMobile() {
         this.isMobile = !!('ontouchstart' in window || navigator.msMaxTouchPoints);
     }
 
-    loadInitialImage(){
+    loadInitialImage() {
         this.currentImage = this.imageData[this.props.overrideImage || 0]
-        this.setImage()
+        this.setImage(true);
     }
 
-    setImage(cached = false){
+    setImage(cached = false) {
         this.currentLeftPosition = this.currentTopPosition = 0
 
-        if(!cached){
+        if (!cached) {
             this.currentCanvasImage = new Image()
-            this.currentCanvasImage.crossOrigin='anonymous'
+            this.currentCanvasImage.crossOrigin = 'anonymous'
             this.currentCanvasImage.src = this.currentImage
             this.currentCanvasImage.onload = () => {
                 let viewportElement = this.viewPortElementRef.getBoundingClientRect()
-                this.canvas.width  = (this.state.isFullScreen) ? viewportElement.width : this.currentCanvasImage.width
+                this.canvas.width = (this.state.isFullScreen) ? viewportElement.width : this.currentCanvasImage.width
                 this.canvas.height = (this.state.isFullScreen) ? viewportElement.height : this.currentCanvasImage.height
                 this.trackTransforms(this.ctx)
                 this.redraw()
@@ -294,10 +294,10 @@ class React360Viewer extends Component {
             this.currentCanvasImage.onerror = () => {
                 console.log('cannot load this image')
             }
-        }else{
+        } else {
             this.currentCanvasImage = this.images[this.activeImage - 1 || 0]
             let viewportElement = this.viewPortElementRef.getBoundingClientRect()
-            this.canvas.width  = (this.state.isFullScreen) ? viewportElement.width : this.currentCanvasImage.width
+            this.canvas.width = (this.state.isFullScreen) ? viewportElement.width : this.currentCanvasImage.width
             this.canvas.height = (this.state.isFullScreen) ? viewportElement.height : this.currentCanvasImage.height
             this.trackTransforms(this.ctx)
             this.redraw()
@@ -305,49 +305,49 @@ class React360Viewer extends Component {
 
     }
 
-    redraw(){
+    redraw() {
         try {
-            let p1 = this.ctx.transformedPoint(0,0);
-            let p2 = this.ctx.transformedPoint(this.canvas.width,this.canvas.height)
+            let p1 = this.ctx.transformedPoint(0, 0);
+            let p2 = this.ctx.transformedPoint(this.canvas.width, this.canvas.height)
             let hRatio = this.canvas.width / this.currentCanvasImage.width
-            let vRatio =  this.canvas.height / this.currentCanvasImage.height
-            let ratio  = Math.min(hRatio, vRatio);
-            let centerShift_x = (this.canvas.width - this.currentCanvasImage.width*ratio )/2
-            let centerShift_y = (this.canvas.height - this.currentCanvasImage.height*ratio )/2
-            this.ctx.clearRect(p1.x,p1.y,p2.x-p1.x,p2.y-p1.y);
-            this.centerX = this.currentCanvasImage.width*ratio/2
-            this.centerY = this.currentCanvasImage.height*ratio/2
+            let vRatio = this.canvas.height / this.currentCanvasImage.height
+            let ratio = Math.min(hRatio, vRatio);
+            let centerShift_x = (this.canvas.width - this.currentCanvasImage.width * ratio) / 2
+            let centerShift_y = (this.canvas.height - this.currentCanvasImage.height * ratio) / 2
+            this.ctx.clearRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
+            this.centerX = this.currentCanvasImage.width * ratio / 2
+            this.centerY = this.currentCanvasImage.height * ratio / 2
 
             //center image
             this.ctx.drawImage(this.currentCanvasImage, this.currentLeftPosition, this.currentTopPosition, this.currentCanvasImage.width, this.currentCanvasImage.height,
-                        centerShift_x,centerShift_y,this.currentCanvasImage.width*ratio, this.currentCanvasImage.height*ratio);
+                centerShift_x, centerShift_y, this.currentCanvasImage.width * ratio, this.currentCanvasImage.height * ratio);
             // WebKit fix for image not showing in canvas on init
-            if(navigator.userAgent.indexOf('AppleWebKit') !== -1){
-              const originalPosition = this.canvas.style.position;
-              this.canvas.style.position='absolute';
-              this.canvas.style.display='table';
-              // eslint-disable-next-line no-unused-expressions
-              this.canvas.offsetHeight; // no need to store this anywhere, the reference is enough
-              this.canvas.style.display='';
-              this.canvas.style.position = originalPosition;
+            if (navigator.userAgent.indexOf('AppleWebKit') !== -1) {
+                const originalPosition = this.canvas.style.position;
+                this.canvas.style.position = 'absolute';
+                this.canvas.style.display = 'table';
+                // eslint-disable-next-line no-unused-expressions
+                this.canvas.offsetHeight; // no need to store this anywhere, the reference is enough
+                this.canvas.style.display = '';
+                this.canvas.style.position = originalPosition;
             }
             //this.addHotspots()
         }
-        catch(e){
+        catch (e) {
             this.trackTransforms(this.ctx)
         }
     }
 
-    trackTransforms(ctx){
+    trackTransforms(ctx) {
         return new Promise(resolve => {
-            var svg = document.createElementNS("http://www.w3.org/2000/svg",'svg');
+            var svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
             var xform = svg.createSVGMatrix();
-            this.ctx.getTransform = function(){ return xform; };
+            this.ctx.getTransform = function () { return xform; };
 
             var savedTransforms = [];
             var save = ctx.save;
             this.ctx.save = () => {
-                savedTransforms.push(xform.translate(0,0));
+                savedTransforms.push(xform.translate(0, 0));
                 return save.call(this.ctx);
             };
             var restore = ctx.restore;
@@ -356,40 +356,40 @@ class React360Viewer extends Component {
                 return restore.call(this.ctx);
             };
             var scale = this.ctx.scale;
-            this.ctx.scale = (sx,sy) => {
-                xform = xform.scaleNonUniform(sx,sy);
-                return scale.call(this.ctx,sx,sy);
+            this.ctx.scale = (sx, sy) => {
+                xform = xform.scaleNonUniform(sx, sy);
+                return scale.call(this.ctx, sx, sy);
             };
             var rotate = this.ctx.rotate;
             this.ctx.rotate = (radians) => {
-                xform = xform.rotate(radians*180/Math.PI);
-                return rotate.call(this.ctx,radians);
+                xform = xform.rotate(radians * 180 / Math.PI);
+                return rotate.call(this.ctx, radians);
             };
             var translate = this.ctx.translate;
-            this.ctx.translate = (dx,dy) => {
-                xform = xform.translate(dx,dy);
-                return translate.call(this.ctx,dx,dy);
+            this.ctx.translate = (dx, dy) => {
+                xform = xform.translate(dx, dy);
+                return translate.call(this.ctx, dx, dy);
             };
             var transform = this.ctx.transform;
-            this.ctx.transform = (a,b,c,d,e,f) => {
+            this.ctx.transform = (a, b, c, d, e, f) => {
                 var m2 = svg.createSVGMatrix();
-                m2.a=a; m2.b=b; m2.c=c; m2.d=d; m2.e=e; m2.f=f;
+                m2.a = a; m2.b = b; m2.c = c; m2.d = d; m2.e = e; m2.f = f;
                 xform = xform.multiply(m2);
-                return transform.call(this.ctx,a,b,c,d,e,f);
+                return transform.call(this.ctx, a, b, c, d, e, f);
             };
             var setTransform = this.ctx.setTransform;
-            this.ctx.setTransform = (a,b,c,d,e,f) => {
+            this.ctx.setTransform = (a, b, c, d, e, f) => {
                 xform.a = a;
                 xform.b = b;
                 xform.c = c;
                 xform.d = d;
                 xform.e = e;
                 xform.f = f;
-                return setTransform.call(this.ctx,a,b,c,d,e,f);
+                return setTransform.call(this.ctx, a, b, c, d, e, f);
             };
-            var pt  = svg.createSVGPoint();
-            this.ctx.transformedPoint = (x,y) => {
-                pt.x=x; pt.y=y;
+            var pt = svg.createSVGPoint();
+            this.ctx.transformedPoint = (x, y) => {
+                pt.x = x; pt.y = y;
                 return pt.matrixTransform(xform.inverse());
             }
             resolve(this.ctx)
@@ -418,11 +418,11 @@ class React360Viewer extends Component {
         this.setImage(true)
     }
 
-    turnLeft(sourceEvent){
+    turnLeft(sourceEvent) {
         this.moveActiveIndexDown(1, sourceEvent);
     }
 
-    turnRight(sourceEvent){
+    turnRight(sourceEvent) {
         this.moveActiveIndexUp(1, sourceEvent);
     }
 
@@ -468,16 +468,16 @@ class React360Viewer extends Component {
         this.redraw()
     }
 
-    updateCallback = (oldImage, sourceEvent) => () => this.props.onUpdate && this.props.onUpdate({index: oldImage - 1, image: this.images[this.activeImage - 1]}, {index: this.activeImage - 1, image: this.images[this.activeImage - 1]}, sourceEvent)
+    updateCallback = (oldImage, sourceEvent) => () => this.props.onUpdate && this.props.onUpdate({ index: oldImage - 1, image: this.images[this.activeImage - 1] }, { index: this.activeImage - 1, image: this.images[this.activeImage - 1] }, sourceEvent)
 
     zoomImage = (evt) => {
-        if(this.isTruthy(this.props.allowZoom)) {
+        if (this.isTruthy(this.props.allowZoom)) {
             this.setState({
                 lastX: evt.offsetX || (evt.pageX - this.canvas.offsetLeft),
                 lastY: evt.offsetY || (evt.pageY - this.canvas.offsetTop)
             })
 
-            var delta = evt.wheelDelta ? evt.wheelDelta/40 : evt.deltaY ? -evt.deltaY : 0;
+            var delta = evt.wheelDelta ? evt.wheelDelta / 40 : evt.deltaY ? -evt.deltaY : 0;
 
             if (delta) this.zoom(delta);
             //return evt.preventDefault() && false;
@@ -501,38 +501,38 @@ class React360Viewer extends Component {
         this.zoom(-2)
     }
 
-    zoom(clicks){
+    zoom(clicks) {
         //console.log(this.lastX + ' - ' + this.lastY)
-        let factor = Math.pow(1.01,clicks);
+        let factor = Math.pow(1.01, clicks);
         //console.log(factor)
-        if(factor > 1){
+        if (factor > 1) {
             this.currentScale += factor
-        }else{
-            if(this.currentScale-factor > 1)
+        } else {
+            if (this.currentScale - factor > 1)
                 this.currentScale -= factor
             else
                 this.currentScale = 1
         }
 
-        if(this.currentScale > 1){
-            let pt = this.ctx.transformedPoint(this.state.lastX,this.state.lastY);
-            this.ctx.translate(pt.x,pt.y);
+        if (this.currentScale > 1) {
+            let pt = this.ctx.transformedPoint(this.state.lastX, this.state.lastY);
+            this.ctx.translate(pt.x, pt.y);
 
             //console.log(this.currentScale)
-            this.ctx.scale(factor,factor);
-            this.ctx.translate(-pt.x,-pt.y);
+            this.ctx.scale(factor, factor);
+            this.ctx.translate(-pt.x, -pt.y);
             this.redraw();
         }
     }
 
-    disableZoomin(){
+    disableZoomin() {
         document.addEventListener("gesturestart", function (e) {
-          e.preventDefault();
+            e.preventDefault();
             document.body.style.zoom = 0.99;
         });
         document.addEventListener("gesturechange", function (e) {
-          e.preventDefault();
-          document.body.style.zoom = 0.99;
+            e.preventDefault();
+            document.body.style.zoom = 0.99;
         });
 
         document.addEventListener("gestureend", function (e) {
@@ -542,7 +542,7 @@ class React360Viewer extends Component {
     }
 
 
-    onMove(pageX){
+    onMove(pageX) {
         if (pageX - this.movementStart >= this.getSpeedFactor()) {
             let itemsSkippedRight = Math.floor((pageX - this.movementStart) / this.getSpeedFactor()) || 1;
 
@@ -573,7 +573,7 @@ class React360Viewer extends Component {
     }
 
     doMoving = (evt) => {
-        if(this.movement){
+        if (this.movement) {
             this.onMove(evt.clientX)
         }
     }
@@ -609,7 +609,7 @@ class React360Viewer extends Component {
     }
 
     stop() {
-        if(this.activeImage === 1){
+        if (this.activeImage === 1) {
             this.setState({ currentLoop: 0 })
         }
         this.setState({ playing: false })
@@ -619,17 +619,17 @@ class React360Viewer extends Component {
     loopImages() {
         let loop = (this.props.loop) ? this.props.loop : 1
 
-        if(this.activeImage === 1){
-            if(this.state.currentLoop === loop){
+        if (this.activeImage === 1) {
+            if (this.state.currentLoop === loop) {
                 this.stop()
             }
-            else{
+            else {
                 this.setState({ currentLoop: this.state.currentLoop + 1 })
 
                 this.next()
             }
         }
-        else{
+        else {
             this.next()
         }
     }
@@ -647,44 +647,44 @@ class React360Viewer extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if((prevProps.fileName !== this.props.fileName ||
-          prevProps.imagePath !== this.props.imagePath ||
-          prevProps.images !== this.props.images) && this.ctx) {
-          this.redraw();
-          this.setState({imagesLoaded: false})
-          this.imageData = [];
-          this.images = [];
-          this.loadedImages = 0;
-          this.fetchData();
+        if ((prevProps.fileName !== this.props.fileName ||
+            prevProps.imagePath !== this.props.imagePath ||
+            prevProps.images !== this.props.images) && this.ctx) {
+            this.redraw();
+            this.setState({ imagesLoaded: false })
+            this.imageData = [];
+            this.images = [];
+            this.loadedImages = 0;
+            this.fetchData();
         }
 
-        if(prevProps.overrideImage !== this.props.overrideImage && this.ctx) {
-          this.setState({activeImage: this.props.overrideImage + 1});
-          this.loadInitialImage();
+        if (prevProps.overrideImage !== this.props.overrideImage && this.ctx) {
+            this.setState({ activeImage: this.props.overrideImage + 1 });
+            this.loadInitialImage();
         }
 
-        if(this.state.currentLeftPosition !== prevState.currentLeftPosition){
+        if (this.state.currentLeftPosition !== prevState.currentLeftPosition) {
             console.log('Left Position Changed')
         }
 
-        if(this.state.panmode !== prevState.panmode){
+        if (this.state.panmode !== prevState.panmode) {
             this.attachEvents()
         }
 
-        if(this.state.playing !== prevState.playing){
-            if(!this.state.playing){
+        if (this.state.playing !== prevState.playing) {
+            if (!this.state.playing) {
                 this.stop()
-            }else{
+            } else {
                 this.play()
             }
         }
 
-        if(this.state.isFullScreen !== prevState.isFullScreen){
-            if(!this.state.isFullScreen){
+        if (this.state.isFullScreen !== prevState.isFullScreen) {
+            if (!this.state.isFullScreen) {
                 //exit full screen
                 this.viewerContainerRef.classList.remove('v360-main')
                 this.viewerContainerRef.classList.remove('v360-fullscreen')
-            }else{
+            } else {
                 //enter full screen
                 this.viewerContainerRef.classList.add('v360-main')
                 this.viewerContainerRef.classList.add('v360-fullscreen')
@@ -695,10 +695,10 @@ class React360Viewer extends Component {
 
     handlePinch = (e) => {
         if (e.scale < this.currentScale) {
-        // zoom in
+            // zoom in
             this.zoomIn();
         } else if (e.scale > this.currentScale) {
-        // zoom out
+            // zoom out
             this.zoomOut();
         }
 
@@ -713,28 +713,28 @@ class React360Viewer extends Component {
 
         return (
             <div>
-                <div className="v360-viewer-container" ref={(inputEl) => {this.viewerContainerRef = inputEl}} id={this.props.id ? this.props.id : "identifier"} onWheel={(e) => this.zoomImage(e)}>
+                <div className="v360-viewer-container" ref={(inputEl) => { this.viewerContainerRef = inputEl }} id={this.props.id ? this.props.id : "identifier"} onWheel={(e) => this.zoomImage(e)}>
 
                     {!this.state.imagesLoaded &&
-                      <div className="v360-viewport">
-                          <div className="v360-spinner-grow"></div>
-                          <p ref={this.viewPercentageRef}
-                            className={`v360-percentage-text ${!this.isTruthy(this.props.showPercentage) && "sr-only"}`}>
-                          </p>
-                          {this.props.loadingIndicator && <this.props.loadingIndicator />}
-                      </div>
+                        <div className="v360-viewport">
+                            <div className="v360-spinner-grow"></div>
+                            <p ref={this.viewPercentageRef}
+                                className={`v360-percentage-text ${!this.isTruthy(this.props.showPercentage) && "sr-only"}`}>
+                            </p>
+                            {this.props.loadingIndicator && <this.props.loadingIndicator />}
+                        </div>
                     }
                     <HammerComponent onPinchIn={this.handlePinch} onPinchOut={this.handlePinch} onPinchEnd={this.pinchOut}
                         options={{
-                        recognizers: {
-                            pinch: { enable: this.isTruthy(this.props.allowPinch) }
-                        }
-                    }}>
+                            recognizers: {
+                                pinch: { enable: this.isTruthy(this.props.allowPinch) }
+                            }
+                        }}>
                         <div className="v360-viewport-container v360-viewport">
                             <canvas
                                 aria-label={this.props.label}
                                 className={`v360-image-container ${!this.state.imagesLoaded && "sr-only"}`}
-                                ref={(inputEl) => {this.imageContainerRef = inputEl}}
+                                ref={(inputEl) => { this.imageContainerRef = inputEl }}
                             ></canvas>
                             {this.props.boxShadow ? <div className="v360-product-box-shadow"></div> : ''}
                         </div>
@@ -749,19 +749,19 @@ class React360Viewer extends Component {
                     </abbr>}
 
                     {
-                      this.props.buttonNext && <this.props.buttonNext onClick={()=>this.next('nextArrow')} disabled={!this.state.imagesLoaded} />
+                        this.props.buttonNext && <this.props.buttonNext onClick={() => this.next('nextArrow')} disabled={!this.state.imagesLoaded} />
                     }
 
                     {
-                      this.props.buttonPrevious && <this.props.buttonPrevious onClick={()=>this.prev('previousArrow')} disabled={!this.state.imagesLoaded} />
+                        this.props.buttonPrevious && <this.props.buttonPrevious onClick={() => this.prev('previousArrow')} disabled={!this.state.imagesLoaded} />
                     }
 
                     {
-                      this.props.buttonPlay && <this.props.buttonPlay onClick={()=>this.togglePlay()} disabled={!this.state.imagesLoaded} />
+                        this.props.buttonPlay && <this.props.buttonPlay onClick={() => this.togglePlay()} disabled={!this.state.imagesLoaded} />
                     }
 
                     {
-                      this.props.buttonExpand && <this.props.buttonExpand onClick={()=>this.toggleFullScreen()} disabled={!this.state.imagesLoaded} />
+                        this.props.buttonExpand && <this.props.buttonExpand onClick={() => this.toggleFullScreen()} disabled={!this.state.imagesLoaded} />
                     }
 
                     {this.isTruthy(this.props.showMenu) && <div id="v360-menu-btns" className={this.props.buttonClass}>
@@ -779,7 +779,7 @@ class React360Viewer extends Component {
                                 icon="fa fa-search-minus"
                             />
 
-                            {this.state.panmode ? <Button clicked={this.togglePanMode} text="360&deg;"/> : <Button clicked={this.togglePanMode} icon="fa fa-hand-paper"/>}
+                            {this.state.panmode ? <Button clicked={this.togglePanMode} text="360&deg;" /> : <Button clicked={this.togglePanMode} icon="fa fa-hand-paper" />}
 
                             <Button
                                 clicked={this.prev}
@@ -794,7 +794,7 @@ class React360Viewer extends Component {
                                 icon="fa fa-sync"
                             />
                         </div>
-                    </div> }
+                    </div>}
                 </div>
             </div>
 
